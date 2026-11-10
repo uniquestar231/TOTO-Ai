@@ -1,0 +1,4 @@
+const http=require('http'),fs=require('fs'),path=require('path');
+const files={'/':['index.html','text/html; charset=utf-8'],'/index.html':['index.html','text/html; charset=utf-8'],'/app.js':['app.js','text/javascript; charset=utf-8']};
+const port=Number(process.env.PORT||3000);
+http.createServer((req,res)=>{const file=files[req.url.split('?')[0]];if(!file||!['GET','HEAD'].includes(req.method)){res.writeHead(404);return res.end('Not found');}fs.readFile(path.join(__dirname,file[0]),(err,data)=>{if(err){res.writeHead(500);return res.end('File missing');}res.writeHead(200,{'Content-Type':file[1],'Cache-Control':'no-cache','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'});res.end(req.method==='HEAD'?undefined:data);});}).listen(port,'0.0.0.0',()=>console.log(`TOTO.Ai website ready: http://localhost:${port}`));
